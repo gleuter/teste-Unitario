@@ -2,6 +2,11 @@ package br.com.caelum.leilao.dominio.servico;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import org.junit.Test;
 
 import br.com.caelum.leilao.dominio.Lance;
@@ -74,6 +79,65 @@ public class TesteDoAvaliador {
         assertEquals(3000.0, leiloeiro.getMaiorLance(), 0.0001);
         assertEquals(1000.0, leiloeiro.getMenorLance(), 0.0001);
     }
+    
+    @Test
+    public void deveEntenderLeilaoComApenasUmLance() {
+        Usuario joao = new Usuario("João"); 
+        Leilao leilao = new Leilao("Playstation 3 Novo");
+
+        leilao.propoe(new Lance(joao, 1000.0));
+
+        Avaliador leiloeiro = new Avaliador();
+        leiloeiro.avalia(leilao);
+
+        assertEquals(1000.0, leiloeiro.getMaiorLance(), 0.0001);
+        assertEquals(1000.0, leiloeiro.getMenorLance(), 0.0001);
+    }
+    
+    @Test
+    public void entendendoComparator() { 
+    	
+    	List<Integer> maiores = Arrays.asList(3,2,1);
+    	
+	Collections.sort(maiores,new Comparator<Integer>() {
+		public int compare(Integer arg0, Integer arg1) {
+			if (arg0<arg1)return 1;
+			if (arg0>arg1)return -1;
+			return 0;
+		}
+		});
+	
+	for (Integer integer : maiores) {
+		System.out.println(maiores);
+	}
+    }
+    
+    @Test
+    public void deveEncontrarOsTresMaioresLances() {
+        Usuario joao = new Usuario("João");
+        Usuario maria = new Usuario("Maria");
+        Leilao leilao = new Leilao("Playstation 3 Novo");
+
+        leilao.propoe(new Lance(joao, 100.0));
+        leilao.propoe(new Lance(maria, 200.0));
+        leilao.propoe(new Lance(joao, 300.0));
+        leilao.propoe(new Lance(maria, 400.0));
+
+        Avaliador leiloeiro = new Avaliador();
+        leiloeiro.avalia(leilao);
+
+        List<Lance> maiores = leiloeiro.getTresMaiores();
+
+        assertEquals(3, maiores.size());
+    }
+
+    
+    
+    
+    
+    
+    
+    
 }
     
     
